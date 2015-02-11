@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/scala-2.10/classes" path="src/main/scala"/>
+	<classpathentry kind="src" output="target/scala-2.10/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/scala-2.10/test-classes" path="src/test/scala"/>
+	<classpathentry kind="src" output="target/scala-2.10/test-classes" path="src/test/java"/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_COMPILER_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/romantsegelskyi/.ivy2/cache/com.oracle/truffle/jars/truffle-0.5.jar"/>
+	<classpathentry kind="lib" path="/Users/romantsegelskyi/.ivy2/local/EPFL/lms_2.10/0.3-SNAPSHOT/jars/lms_2.10.jar"/>
+	<classpathentry kind="lib" path="/Users/romantsegelskyi/.ivy2/cache/org.scalatest/scalatest_2.10/jars/scalatest_2.10-2.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/romantsegelskyi/.ivy2/cache/org.scala-lang.virtualized/scala-actors/jars/scala-actors-2.10.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
