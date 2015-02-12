@@ -10,26 +10,42 @@ import com.oracle.truffle.api.nodes.Node._
 import scala.collection.mutable.ArrayBuffer
 import scala.annotation.meta.field
 
-trait TruffleCodeGenPkg extends TruffleGenNumericOps { val IR: ScalaOpsPkgExp }
+trait TruffleGenPkg extends TruffleGenNumericOps { val IR: TruffleOpsPkg }
+
+trait TruffleOpsPkg extends Base
+  with ImplicitOps with NumericOps with FractionalOps with OrderingOps with StringOps
+  with RangeOps with IOOps with ArrayOps with BooleanOps with PrimitiveOps with MiscOps
+  with Equal with IfThenElse with Variables with While with TupleOps with ListOps
+  with SeqOps with MathOps with CastingOps with SetOps with ObjectOps with ArrayBufferOps
 
 trait TruffleGenNumericOps extends TruffleGen {
   val IR: NumericOpsExp
   import IR._
 
+  case class IntPlus(@(Child @field) x: ExpNode[Int], @(Child @field) y: ExpNode[Int]) extends Def[Int] {
+    def execute(frame: VirtualFrame) = {
+      x.execute(frame) + y.execute(frame)
+    }
+  }
+
   def genNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case NumericPlus(a, b) => reflect(IntPlus(a, b))
     case _ => super.genNode(sym, rhs)
   }
 }
 
 trait TruffleGen extends BlockTraversal with Config {
-  // truffle interface
   val IR: Expressions
   import IR._
+
   trait Typ[T] {
     def slotKind: FrameSlotKind
   }
 
-  type Rep[+T] = Exp[T]
+  def reflect[T: Typ](d: Def[T]): Exp[T] = {
+    val x = createDefinition(fresh, d)
+    x
+  }
 
   // truffle interface
   var runtime: TruffleRuntime = _
@@ -43,7 +59,32 @@ trait TruffleGen extends BlockTraversal with Config {
 
   override def createDefinition[T: Typ](v: Sym[T], d: Def[T]) = { localDefs += AssignNode(v.slot, d); v }
 
-  def getArg[T: Typ](index: Int): Stm = {
+  def genAST[T: Typ, U: Typ](f: Exp[T] => Exp[U]) = new (T => U) {
+    val rootNode = {
+      val saveC = varCount
+      val saveD = frameDescriptor
+      try {
+        varCount = 0
+        frameDescriptor = new FrameDescriptor();
+        val t = reify(f(getArg[T](0)));
+        new LMSRootNode(frameDescriptor, t);
+      } finally {
+        //varCount = saveC
+        //frameDescriptor = saveD
+      }
+    }
+    val target = runtime.createCallTarget(rootNode)
+
+    override def apply(x: T) = {
+      val result = target.call(Array(x.asInstanceOf[AnyRef]));
+      result.asInstanceOf[U]
+    }
+  }
+
+  def genNode(sym: Sym[Any], rhs: Def[Any]): Unit = {
+    throw new GenerationFailedException("don't know how to generate code for: " + rhs)
+  }
+  def getArg[T: Typ](index: Int): Exp[T] = {
     val x = createDefinition(fresh, GetArg[T](index))
     x
   }
@@ -62,25 +103,6 @@ trait TruffleGen extends BlockTraversal with Config {
     val stms = localDefs.toArray
     localDefs = save
     BlockNode(stms, res)
-  }
-
-  def lms[T: Typ, U: Typ](f: Rep[T] => Rep[U]) = new (T => U) {
-    val rootNode = {
-      val saveC = varCount
-      val saveD = frameDescriptor
-      try {
-        varCount = 0
-        frameDescriptor = new FrameDescriptor();
-        val t = reifyBlock(f(getArg[T](0)));
-        new LMSRootNode(frameDescriptor, BlockNode(t._2, t._1));
-      }
-    }
-    val target = runtime.createCallTarget(rootNode)
-
-    override def apply(x: T) = {
-      val result = target.call(Array(x.asInstanceOf[AnyRef]));
-      result.asInstanceOf[U]
-    }
   }
 
   class LMSRootNode[@specialized T](desc: FrameDescriptor, @(Child @field) val block: BlockNode[T]) extends RootNode(null, desc) {
@@ -116,10 +138,6 @@ trait TruffleGen extends BlockTraversal with Config {
 
   trait StmNode extends BaseNode {
     def execute(frame: VirtualFrame): Unit
-  }
-
-  def genAST[A: Manifest](args: List[Sym[_]], body: Block[A]): LMSRootNode[A] = {
-    emitBlock(body)
   }
 
   case class AssignNode[@specialized T: Typ](slot: FrameSlot, @(Child @field) d: DefNode[T]) extends StmNode {
