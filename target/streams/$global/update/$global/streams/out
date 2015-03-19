@@ -1,4 +1,4 @@
-[0m[[0minfo[0m] [0mUpdating {file:/Users/romantsegelskyi/cs590proj/lms-truffle-integration/}lms-truffle-integration...[0m
+[0m[[0minfo[0m] [0mUpdating {file:/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/}lms-truffle-integration...[0m
 [0m[[0mdebug[0m] [0m:: resolving dependencies :: default#lms-truffle-integration_2.10;0.1-SNAPSHOT[0m
 [0m[[0mdebug[0m] [0m	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool][0m
 [0m[[0mdebug[0m] [0m	validate = true[0m
@@ -7,7 +7,7 @@
 [0m[[0mdebug[0m] [0m== resolving dependencies for default#lms-truffle-integration_2.10;0.1-SNAPSHOT [compile][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies default#lms-truffle-integration_2.10;0.1-SNAPSHOT->org.scala-lang.virtualized#scala-compiler;2.10.2 [compile->default(compile)][0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang.virtualized#scala-compiler;2.10.2 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@46c6d431[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3ec23427[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang.virtualized#scala-compiler;2.10.2[0m
 [0m[[0mdebug[0m] [0m	local: revision in cache: org.scala-lang.virtualized#scala-compiler;2.10.2[0m
 [0m[[0mdebug[0m] [0m	found org.scala-lang.virtualized#scala-compiler;2.10.2 in sbt-chain[0m
@@ -75,8 +75,11 @@
 [0m[[0mdebug[0m] [0m		tried /Users/romantsegelskyi/.ivy2/local/EPFL/lms_2.10/0.3-SNAPSHOT/ivys/ivy.xml[0m
 [0m[[0mdebug[0m] [0m	local: found md file for EPFL#lms_2.10;0.3-SNAPSHOT[0m
 [0m[[0mdebug[0m] [0m		=> /Users/romantsegelskyi/.ivy2/local/EPFL/lms_2.10/0.3-SNAPSHOT/ivys/ivy.xml (0.3-SNAPSHOT)[0m
-[0m[[0mdebug[0m] [0m	default-cache: revision in cache (not updated): EPFL#lms_2.10;0.3-SNAPSHOT[0m
-[0m[[0mdebug[0m] [0m	found EPFL#lms_2.10;0.3-SNAPSHOT in sbt-chain[0m
+[0m[[0mdebug[0m] [0m	[NOT REQUIRED] EPFL#lms_2.10;0.3-SNAPSHOT!ivy.xml(ivy.original)[0m
+[0m[[0mdebug[0m] [0mEPFL#lms_2.10;0.3-SNAPSHOT is changing, but has not changed: will trust cached artifacts if any[0m
+[0m[[0mdebug[0m] [0mDeleting additional old artifacts from cache for changed module EPFL#lms_2.10;0.3-SNAPSHOT:[0m
+[0m[[0mdebug[0m] [0m	[0m
+[0m[[0mdebug[0m] [0m	found EPFL#lms_2.10;0.3-SNAPSHOT in local[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies EPFL#lms_2.10;0.3-SNAPSHOT->org.scala-lang.virtualized#scala-compiler;2.10.2 [compile->default(compile)][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies EPFL#lms_2.10;0.3-SNAPSHOT->org.scala-lang.virtualized#scala-compiler;2.10.2 [compile->runtime][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies EPFL#lms_2.10;0.3-SNAPSHOT->org.scala-lang.virtualized#scala-compiler;2.10.2 [compile->compile][0m
@@ -504,6 +507,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.virtualized#scala-library;2.10.2!scala-library.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] com.oracle#truffle;0.5!truffle.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.virtualized#scala-reflect;2.10.2!scala-reflect.jar[0m
+[0m[[0mdebug[0m] [0m		tried /Users/romantsegelskyi/.ivy2/local/EPFL/lms_2.10/0.3-SNAPSHOT/jars/lms_2.10.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] EPFL#lms_2.10;0.3-SNAPSHOT!lms_2.10.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scalatest#scalatest_2.10;2.1.2!scalatest_2.10.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-library;2.10.3!scala-library.jar[0m
@@ -511,19 +515,19 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.virtualized#scala-actors;2.10.2!scala-actors.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.virtualized#jline;2.10.2!jline.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 202ms :: artifacts dl 8ms[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT compile produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-compile.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT runtime produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-runtime.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT test produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-test.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT provided produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-provided.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT optional produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-optional.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT compile-internal produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-compile-internal.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT runtime-internal produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-runtime-internal.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT test-internal produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-test-internal.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT plugin produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-plugin.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT sources produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-sources.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT docs produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-docs.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT pom produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-pom.xml[0m
-[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT scala-tool produced in /Users/romantsegelskyi/cs590proj/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (202ms resolve - 8ms download)[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 256ms :: artifacts dl 13ms[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT compile produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-compile.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT runtime produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-runtime.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT test produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-test.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT provided produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-provided.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT optional produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-optional.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT compile-internal produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-compile-internal.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT runtime-internal produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-runtime-internal.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT test-internal produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-test-internal.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT plugin produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-plugin.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT sources produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-sources.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT docs produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-docs.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT pom produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-pom.xml[0m
+[0m[[0mdebug[0m] [0m	report for default#lms-truffle-integration_2.10;0.1-SNAPSHOT scala-tool produced in /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/resolution-cache/reports/default-lms-truffle-integration_2.10-scala-tool.xml[0m
+[0m[[0mdebug[0m] [0m	resolve done (256ms resolve - 13ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m

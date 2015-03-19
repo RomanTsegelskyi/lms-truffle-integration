@@ -28,13 +28,13 @@ trait TruffleGenNumericOps extends TruffleGen {
     }
   }
 
-  def genNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+  override def genNode(sym: Sym[Any], rhs: DefNode[Any]) = rhs match {
     case NumericPlus(a, b) => reflect(IntPlus(a, b))
     case _ => super.genNode(sym, rhs)
   }
 }
 
-trait TruffleGen extends BlockTraversal with Config {
+trait TruffleGen extends NestedBlockTraversal with Config with Base {
   val IR: Expressions
   import IR._
 
@@ -57,7 +57,7 @@ trait TruffleGen extends BlockTraversal with Config {
 
   implicit def lift[T: Typ: Manifest](x: T): Exp[T] = Const(x)
 
-  override def createDefinition[T: Typ](v: Sym[T], d: Def[T]) = { localDefs += AssignNode(v.slot, d); v }
+  override def createDefinition[T: Typ](v: SymNode[T], d: DefNode[T]) = { localDefs += AssignNode(v.slot, d); v }
 
   def genAST[T: Typ, U: Typ](f: Exp[T] => Exp[U]) = new (T => U) {
     val rootNode = {
@@ -65,12 +65,11 @@ trait TruffleGen extends BlockTraversal with Config {
       val saveD = frameDescriptor
       try {
         varCount = 0
-        frameDescriptor = new FrameDescriptor();
-        val t = reify(f(getArg[T](0)));
+        frameDescriptor = new FrameDescriptor()
+        val t = reifyBlock(f(getArg[T](0)))
+        // we need to traverse block here and generate an AST
         new LMSRootNode(frameDescriptor, t);
       } finally {
-        //varCount = saveC
-        //frameDescriptor = saveD
       }
     }
     val target = runtime.createCallTarget(rootNode)
@@ -81,9 +80,10 @@ trait TruffleGen extends BlockTraversal with Config {
     }
   }
 
-  def genNode(sym: Sym[Any], rhs: Def[Any]): Unit = {
+  def genNode(sym: Sym[Any], rhs: DefNode[Any]) = {
     throw new GenerationFailedException("don't know how to generate code for: " + rhs)
   }
+
   def getArg[T: Typ](index: Int): Exp[T] = {
     val x = createDefinition(fresh, GetArg[T](index))
     x
@@ -94,15 +94,6 @@ trait TruffleGen extends BlockTraversal with Config {
       val args = frame.getArguments()(0).asInstanceOf[Array[Object]];
       args(index).asInstanceOf[T]
     }
-  }
-
-  def reifyBlock[T: Typ](d: => Exp[T]): BlockNode[T] = {
-    val save = localDefs
-    localDefs = new ArrayBuffer
-    val res = d
-    val stms = localDefs.toArray
-    localDefs = save
-    BlockNode(stms, res)
   }
 
   class LMSRootNode[@specialized T](desc: FrameDescriptor, @(Child @field) val block: BlockNode[T]) extends RootNode(null, desc) {
@@ -143,10 +134,7 @@ trait TruffleGen extends BlockTraversal with Config {
   case class AssignNode[@specialized T: Typ](slot: FrameSlot, @(Child @field) d: DefNode[T]) extends StmNode {
     val kind = slot.getKind
     def execute(frame: VirtualFrame): Unit = {
-      //      println("Slot = " + slot)
-      //      println("Kind = " + kind)
       val e = d.execute(frame)
-      //      println("executed = " + e)
       kind match {
         case FrameSlotKind.Int =>
           frame.setInt(slot, e.asInstanceOf[Int])
@@ -162,6 +150,28 @@ trait TruffleGen extends BlockTraversal with Config {
           frame.setByte(slot, e.asInstanceOf[Byte])
         case _ =>
           frame.setObject(slot, e.asInstanceOf[T])
+      }
+    }
+  }
+
+  case class SymNode[@specialized T:Typ](val slot: FrameSlot) extends ExpNode[T] {
+    val kind = slot.getKind
+    def execute(frame: VirtualFrame): T = {
+      kind match {
+        case FrameSlotKind.Int =>
+          frame.getInt(slot).asInstanceOf[T]
+        case FrameSlotKind.Boolean =>
+          frame.getBoolean(slot).asInstanceOf[T]
+        case FrameSlotKind.Long =>
+          frame.getLong(slot).asInstanceOf[T]
+        case FrameSlotKind.Double =>
+          frame.getDouble(slot).asInstanceOf[T]
+        case FrameSlotKind.Float =>
+          frame.getFloat(slot).asInstanceOf[T]
+        case FrameSlotKind.Byte =>
+          frame.getByte(slot).asInstanceOf[T]
+        case _ =>
+          frame.getObject(slot).asInstanceOf[T]
       }
     }
   }

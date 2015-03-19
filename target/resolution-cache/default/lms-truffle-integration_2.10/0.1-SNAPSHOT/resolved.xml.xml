@@ -4,7 +4,7 @@
 		module="lms-truffle-integration_2.10"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20150211095418"
+		publication="20150318121955"
 	>
 		<description>
 		lms-truffle-integration
