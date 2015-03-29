@@ -5,7 +5,7 @@ import com.oracle.truffle.api.frame._
 import com.oracle.truffle.api.nodes._
 import com.oracle.truffle.api.nodes.Node._
 
-trait Types extends TruffleBase {
+trait Types extends TruffleGen {
 
   implicit object unitTyp extends Typ[Unit]{
     def slotKind = FrameSlotKind.Object

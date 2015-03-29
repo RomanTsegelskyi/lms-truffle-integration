@@ -7,13 +7,13 @@ import com.oracle.truffle.api.nodes.Node._
 import scala.annotation.target.field
 import org.scalatest._
 
-import scala.virtualization.lms.internal.Expressions
+import scala.virtualization.lms.internal.{Effects, Expressions}
 
 trait IntegerType extends TruffleGen with Types {
-  val IR: Expressions
+  val IR: Expressions with Effects
   import IR._
 
-  case class IntPlus(@(Child @field) x: ExpNode[Int], @(Child @field) y: ExpNode[Int]) extends DefNode[Int] {
+/*  case class IntPlus(@(Child @field) x: ExpNode[Int], @(Child @field) y: ExpNode[Int]) extends DefNode[Int] {
     def execute(frame: VirtualFrame) = {
       x.execute(frame) + y.execute(frame)
     }
@@ -71,7 +71,7 @@ trait IntegerType extends TruffleGen with Types {
     def execute(frame: VirtualFrame) = {
       x.execute(frame).toString
     }
-  }
+  }*/
 
 //  def int_plus(x: Exp[Int], y: Exp[Int]): Exp[Int] = reflect(IntPlus(x, y))
 //  def int_minus(x: Exp[Int], y: Exp[Int]): Exp[Int] = reflect(IntMinus(x, y))
