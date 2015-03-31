@@ -1,6 +1,6 @@
 package integration
 
-import com.oracle.truffle.api.TruffleRuntime
+import com.oracle.truffle.api.{Truffle, TruffleRuntime}
 import com.oracle.truffle.api.frame.{FrameSlot, VirtualFrame, FrameDescriptor, FrameSlotKind}
 import com.oracle.truffle.api.nodes.Node.{Children, Child}
 import com.oracle.truffle.api.nodes.{ExplodeLoop, Node, RootNode}
@@ -10,39 +10,45 @@ import scala.collection.mutable.ArrayBuffer
 import scala.virtualization.lms.internal._
 
 
-trait TruffleGen extends NestedBlockTraversal with Config {
+trait TruffleGen extends NestedBlockTraversal with Config with Types {
   val IR: Expressions with Effects
   import IR._
 
-  trait Typ[T] {
-    def slotKind: FrameSlotKind
-  }
-
+  val var_map = scala.collection.mutable.Map[Int, FrameSlotKind]()
   // truffle interface
   var runtime: TruffleRuntime = _
   var frameDescriptor: FrameDescriptor = _
 
-  var localDefs: ArrayBuffer[StmNode] = new ArrayBuffer[StmNode]();
+  var localDefs: ArrayBuffer[StmNode] = new ArrayBuffer[StmNode]()
 
   var varCount = 0
 
   implicit def lift[T:Manifest](x: T): Exp[T] = Const(x)
 
-  def createDefinition[T](v: SymNode[T], d: DefNode[T]) = { localDefs += AssignNode(v.slot, d); v }
+  def createDefinition[T](v: SymNode[T], d: DefNode[T]):SymNode[T] = {
+    localDefs += AssignNode(v.slot, d);
+    v
+  }
+
+  //  def SlotKind[T](): FrameSlotKind = {
+  //    manifest(T) match {
+  //      case Int => FrameSlotKind.Int;
+  //    }
+  //  }
 
   var nVars = 0
-  def fresh[T:Manifest]: Sym[T] = Sym[T] { nVars += 1;  if (nVars%1000 == 0) printlog("nVars="+nVars);  nVars -1 }
+  def fresh[T:Manifest]: Sym[T] = Sym[T] {
+    var_map(nVars) = FrameSlotKind.Int
+    nVars += 1
+    nVars - 1
+  }
 
   override def traverseStmsInBlock[A](stms: List[Stm]) = {
     stms foreach traverseStm
   }
 
   override def traverseStm(stm: Stm) = stm match {
-    case TP(sym, rhs) => {
-      println("Symbol id = " + sym.id);
-      println("RHS = " + rhs);
-      localDefs += genNode(sym, rhs);
-    };
+    case TP(sym, rhs) => genNode(sym, rhs)
     case _ => throw new GenerationFailedException("don't know how to generate code for statement: " + stm)
   }
 
@@ -53,37 +59,37 @@ trait TruffleGen extends NestedBlockTraversal with Config {
       val saveC = varCount
       val saveD = frameDescriptor
       try {
-        varCount = 0
+        runtime = Truffle.getRuntime();
         frameDescriptor = new FrameDescriptor()
-        val s = fresh[T]
+        val s = getArg[T](0)
         val t = reifyBlock(f(s))
         traverseBlock(t)
-        println(localDefs)
-        // we need to traverse block here and generate an AST
-        //        new LMSRootNode(frameDescriptor, null);
+        val id = nVars
+        val t1 = new BlockNode[T](localDefs.toArray, new SymNode[T](frameDescriptor.findOrAddFrameSlot(s"x$id", FrameSlotKind.Int)))
+        println(t1)
+        new LMSRootNode(frameDescriptor, t1)
       } finally {
       }
     }
-    //    val target = runtime.createCallTarget(rootNode)
+    val target = runtime.createCallTarget(rootNode)
 
     override def apply(x: T) = {
-      //      val result = target.call(Array(x.asInstanceOf[AnyRef]));
-      println("Before as instance")
-      1.asInstanceOf[U]
-
+      val result = target.call(Array(x.asInstanceOf[AnyRef]));
+      result.asInstanceOf[U]
     }
   }
 
-  def genNode(sym: Sym[Any], rhs: Def[Any]): StmNode = {
+  def genNode(sym: Sym[Any], rhs: Def[Any]):Unit = {
     throw new GenerationFailedException("don't know how to generate code for: " + rhs)
   }
 
-  //  def getArg[T: Typ](index: Int): Exp[T] = {
-  //    val x = createDefinition(fresh, GetArg[T](index))
-  //    x
-  //  }
+  def getArg[T:Manifest](index: Int): Exp[T] = {
+    val sym = fresh[T]
+    val x = createDefinition(genSymNode(sym), new GetArgNode[T](index))
+    sym
+  }
 
-  case class GetArg[@specialized T](index: Int) extends Def[T] {
+  case class GetArgNode[@specialized T](index: Int) extends DefNode[T] {
     def execute(frame: VirtualFrame) = {
       val args = frame.getArguments()(0).asInstanceOf[Array[Object]];
       args(index).asInstanceOf[T]
@@ -96,9 +102,17 @@ trait TruffleGen extends NestedBlockTraversal with Config {
 
   def genExpNode[T](stmt: Exp[T]) = {
     stmt match {
-      case Const(a) => new ConstNode[T](a.asInstanceOf[T]);
-      case Sym(a) => new SymNode(frameDescriptor.addFrameSlot(s"x$a.id", implicitly[Typ[T]].slotKind));
+      case Const(a) => new ConstNode[T](a);
+      case Sym(a) => {
+        new SymNode[T](frameDescriptor.findOrAddFrameSlot(s"x$a", FrameSlotKind.Int))
+      }
     }
+  }
+
+  def genSymNode[T](stmt: Sym[T]) = {
+    val id = stmt.id
+    println(s"x$id")
+    new SymNode[T](frameDescriptor.findOrAddFrameSlot(s"x$id", FrameSlotKind.Int))
   }
 
 
@@ -113,7 +127,9 @@ trait TruffleGen extends NestedBlockTraversal with Config {
       //stms.foreach(_.execute(frame))
       res.execute(frame)
     }
-    override def toString = stms.map(_.toString).mkString("\n")
+    override def toString = {
+      stms.map(_.toString).mkString("\n") + "\n" + res.toString
+    }
   }
 
   abstract class BaseNode extends Node with Product {
@@ -125,7 +141,7 @@ trait TruffleGen extends NestedBlockTraversal with Config {
     def execute(frame: VirtualFrame): T
   }
 
-  trait DefNode[@specialized T] extends BaseNode {
+  trait DefNode[@specialized +T] extends BaseNode {
     def execute(frame: VirtualFrame): T
   }
 

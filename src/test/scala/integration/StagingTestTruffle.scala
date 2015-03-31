@@ -12,7 +12,7 @@ class TruffleTest extends FunSuite {
 
     val sum_c = {
       import driver._
-      val sum22 = (x: Rep[Int]) => x + 22
+      val sum22 = (x: Rep[Int]) => 11 + x + 22
       runtimegen.genAST(sum22)
     }
     println(sum_c(2));

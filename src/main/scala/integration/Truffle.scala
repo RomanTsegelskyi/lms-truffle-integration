@@ -33,12 +33,9 @@ trait TruffleGenPrimitiveOps extends TruffleGen {
     }
   }
 
-  override def genNode(sym: Sym[Any], rhs: Def[Any]):StmNode = rhs match {
+  override def genNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case IntPlus(a, b) => {
-      println("sym = " + a)
-      println("rhs = " + b)
-      // something wrong with variable creation
-      createDefinition(new SymNode(frameDescriptor.addFrameSlot(s"x$sym.id", implicitly[Typ[sym.tp]].slotKind)), IntPlusNode(genExpNode(a.asInstanceOf[Exp[Int]]), genExpNode(b.asInstanceOf[Exp[Int]])))
+      val x = createDefinition(genSymNode(sym), IntPlusNode(genExpNode(a), genExpNode(b)))
     }
     case _ => super.genNode(sym, rhs)
   }
