@@ -14,14 +14,15 @@ trait TruffleGen extends NestedBlockTraversal with Config with Types {
   val IR: Expressions with Effects
   import IR._
 
-  val var_map = scala.collection.mutable.Map[Int, FrameSlotKind]()
   // truffle interface
   var runtime: TruffleRuntime = _
   var frameDescriptor: FrameDescriptor = _
-
+  // map to match variable ID's with slot kinds in frame
+  val var_map = scala.collection.mutable.Map[Int, FrameSlotKind]()
+  // local definition list, populated by createDefinition mostly
   var localDefs: ArrayBuffer[StmNode] = new ArrayBuffer[StmNode]()
-
-  var varCount = 0
+  // counter for local variables
+  var nVars = 0
 
   implicit def lift[T:Manifest](x: T): Exp[T] = Const(x)
 
@@ -30,15 +31,16 @@ trait TruffleGen extends NestedBlockTraversal with Config with Types {
     v
   }
 
-  //  def SlotKind[T](): FrameSlotKind = {
-  //    manifest(T) match {
-  //      case Int => FrameSlotKind.Int;
-  //    }
-  //  }
+  // little hack here
+  def SlotKind(a:Manifest[_]): FrameSlotKind = {
+    val str = a.toString
+    str match {
+      case "Int" => FrameSlotKind.Int
+    }
+  }
 
-  var nVars = 0
   def fresh[T:Manifest]: Sym[T] = Sym[T] {
-    var_map(nVars) = FrameSlotKind.Int
+    var_map(nVars) = SlotKind(manifest[T])
     nVars += 1
     nVars - 1
   }
@@ -56,10 +58,10 @@ trait TruffleGen extends NestedBlockTraversal with Config with Types {
   def genAST[T:Manifest, U:Manifest](f: Exp[T] => Exp[U]) = new (T => U) {
     println("In gen")
     val rootNode = {
-      val saveC = varCount
+      val saveC = nVars
       val saveD = frameDescriptor
       try {
-        runtime = Truffle.getRuntime();
+        runtime = Truffle.getRuntime()
         frameDescriptor = new FrameDescriptor()
         val s = getArg[T](0)
         val t = reifyBlock(f(s))
