@@ -1,15 +1,40 @@
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set()[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
 [0m[[0mdebug[0m] [0m	modified: Set()[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
-[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(SourceAPIChange(integration.TruffleOpsPkgExp), SourceAPIChange(integration.TruffleGen), SourceAPIChange(integration.TruffleGenPkg))[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
 [0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mSources indirectly invalidated by:[0m
 [0m[[0mdebug[0m] [0m	product: Set()[0m
 [0m[[0mdebug[0m] [0m	binary dep: Set()[0m
-[0m[[0mdebug[0m] [0m	external source: Set()[0m
-[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set()[0m
+[0m[[0mdebug[0m] [0m	external source: Set(/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/src/test/scala/integration/StagingTestTruffle.scala)[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/src/test/scala/integration/StagingTestTruffle.scala)[0m
+[0m[[0mdebug[0m] [0mRecompiling all 1 sources: invalidated sources (1) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/scala-2.10/test-classes...[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.10.2[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.10.2[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 3f109f69, interfacing (CompilerInterface) with Scala compiler version 2.10.2-20140310-140650-2481f036a5[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-Yvirtualize[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/classes:/Users/romantsegelskyi/.ivy2/cache/org.scala-lang.virtualized/scala-library/jars/scala-library-2.10.2.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/scala-2.10/test-classes:/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/target/scala-2.10/classes:/Users/romantsegelskyi/.ivy2/cache/org.scala-lang.virtualized/scala-compiler/jars/scala-compiler-2.10.2.jar:/Users/romantsegelskyi/.ivy2/cache/org.scala-lang.virtualized/scala-reflect/jars/scala-reflect-2.10.2.jar:/Users/romantsegelskyi/.ivy2/cache/com.oracle/truffle/jars/truffle-0.5.jar:/Users/romantsegelskyi/.ivy2/local/EPFL/lms_2.10/0.3-SNAPSHOT/jars/lms_2.10.jar:/Users/romantsegelskyi/.ivy2/cache/org.scalatest/scalatest_2.10/jars/scalatest_2.10-2.1.2.jar:/Users/romantsegelskyi/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.3.jar:/Users/romantsegelskyi/.ivy2/cache/org.scala-lang.virtualized/scala-actors/jars/scala-actors-2.10.2.jar[0m
+[0m[[0mdebug[0m] [0mScala compilation took 2.122333593 s[0m
+[0m[[0mdebug[0m] [0mInvalidating by inheritance (transitively)...[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set(/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/src/test/scala/integration/StagingTestTruffle.scala)[0m
+[0m[[0mdebug[0m] [0mInvalidated by transitive public inheritance: Set(/Users/romantsegelskyi/truffle-lms/lms-truffle-integration/src/test/scala/integration/StagingTestTruffle.scala)[0m
+[0m[[0mdebug[0m] [0mInvalidated by direct dependency: Set()[0m
+[0m[[0mdebug[0m] [0mNew invalidations:[0m
+[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0mPreviously invalidated, but (transitively) depend on new invalidations:[0m
+[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0mAll newly invalidated sources after taking into account (previously) recompiled sources:Set()[0m

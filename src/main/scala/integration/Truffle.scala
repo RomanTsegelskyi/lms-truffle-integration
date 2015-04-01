@@ -35,7 +35,7 @@ trait TruffleGenPrimitiveOps extends TruffleGen {
 
   override def genNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case IntPlus(a, b) => {
-      val x = createDefinition(genSymNode(sym), IntPlusNode(genExpNode(a), genExpNode(b)))
+      val x = createDefinition(sym, IntPlusNode(a, genExpNode(b)))
     }
     case _ => super.genNode(sym, rhs)
   }
