@@ -23,20 +23,3 @@ with RangeOps with IOOps with ArrayOps with BooleanOps with PrimitiveOps with Mi
 with Equal with IfThenElse with Variables with While with TupleOps with ListOps
 with SeqOps with MathOps with CastingOps with SetOps with ObjectOps with ArrayBufferOps
 
-trait TruffleGenPrimitiveOps extends TruffleGen {
-  val IR: PrimitiveOpsExp
-  import IR._
-
-  case class IntPlusNode(@(Child @field) x: ExpNode[Int], @(Child @field) y: ExpNode[Int]) extends DefNode[Int] {
-    def execute(frame: VirtualFrame) = {
-      x.execute(frame) + y.execute(frame)
-    }
-  }
-
-  override def genNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case IntPlus(a, b) => {
-      val x = createDefinition(sym, IntPlusNode(a, genExpNode(b)))
-    }
-    case _ => super.genNode(sym, rhs)
-  }
-}

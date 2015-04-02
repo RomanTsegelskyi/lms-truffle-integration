@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.virtualization.lms.internal._
 
 
-trait TruffleGen extends NestedBlockTraversal with Config {
+trait TruffleBaseGen extends NestedBlockTraversal with Config {
   val IR: Expressions with Effects
   import IR._
 
@@ -24,7 +24,7 @@ trait TruffleGen extends NestedBlockTraversal with Config {
 
   def createDefinition[T](v: SymNode[T], d: DefNode[T]):SymNode[T] =  { localDefs += AssignNode(v.slot, d); v}
 
-  // little hack here
+  // little hack here to determine slot kind
   def SlotKind(a:Manifest[_]): FrameSlotKind = {
     val str = a.toString
     str match {
@@ -50,8 +50,7 @@ trait TruffleGen extends NestedBlockTraversal with Config {
         runtime = Truffle.getRuntime()
         frameDescriptor = new FrameDescriptor()
         val blk = reifyBlock(f(getArg[T](0)))
-        traverseBlock(blk)
-        val truffleTree = new BlockNode[U](localDefs.toArray, genExpNode(getBlockResultFull(blk)))
+        val truffleTree = reifyBlockToTrufle(blk, 1)
         new LMSRootNode(frameDescriptor, truffleTree)
       } finally {
       }
@@ -59,14 +58,26 @@ trait TruffleGen extends NestedBlockTraversal with Config {
     val target = runtime.createCallTarget(rootNode)
 
     override def apply(x: T) = {
-      val result = target.call(Array(x.asInstanceOf[AnyRef]));
+      val result = target.call(Array(x.asInstanceOf[AnyRef]))
       result.asInstanceOf[U]
     }
   }
 
+  def reifyBlockToTrufle[U](block: Block[U], numArgs: Int) = {
+    val save = localDefs.slice(0, localDefs.length - numArgs)
+    val args = localDefs.slice(localDefs.length - numArgs, localDefs.length)
+    localDefs = new ArrayBuffer
+    localDefs = localDefs ++ args
+    traverseBlock(block)
+    val stms = localDefs.toArray
+    val res = getBlockResultFull(block)
+    localDefs = save
+    BlockNode[U](stms, res)
+  }
+
   def getArg[T:Manifest](index: Int): Exp[T] = {
     val sym = fresh[T]
-    val x = createDefinition(genSymNode(sym), new GetArgNode[T](index))
+    val x = createDefinition(sym, new GetArgNode[T](index))
     sym
   }
 
@@ -83,11 +94,6 @@ trait TruffleGen extends NestedBlockTraversal with Config {
         new SymNode[T](frameDescriptor.findOrAddFrameSlot(s"x$a", SlotKind(stmt.tp)))
       }
     }
-  }
-
-  def genSymNode[T](stmt: Sym[T]) = {
-    val id = stmt.id
-    new SymNode[T](frameDescriptor.findOrAddFrameSlot(s"x$id", SlotKind(stmt.tp)))
   }
 
   class LMSRootNode[@specialized T](desc: FrameDescriptor, @(Child @field) val block: BlockNode[T]) extends RootNode(null, desc) {

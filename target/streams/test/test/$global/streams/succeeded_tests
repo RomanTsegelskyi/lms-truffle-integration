@@ -1,5 +1,6 @@
 #Successful Tests
-#Wed Apr 01 16:42:39 EDT 2015
+#Thu Apr 02 15:01:54 EDT 2015
+integration.PrimitiveGenTest=1428001314193
 integration.StagingTest=1423667999742
 cs590.week4.StagingTest=1417978520383
-integration.TruffleTest=1427920959426
+integration.TruffleTest=1428001143462
