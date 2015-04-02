@@ -24,6 +24,8 @@ trait TruffleBaseGen extends NestedBlockTraversal with Config {
 
   def createDefinition[T](v: SymNode[T], d: DefNode[T]):SymNode[T] =  { localDefs += AssignNode(v.slot, d); v}
 
+  def lift[T:Manifest](x: T) = Const(x)
+
   // little hack here to determine slot kind
   def SlotKind(a:Manifest[_]): FrameSlotKind = {
     val str = a.toString
