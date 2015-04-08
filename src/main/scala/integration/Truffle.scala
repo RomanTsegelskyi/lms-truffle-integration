@@ -8,7 +8,7 @@ import com.oracle.truffle.api.nodes.{ExplodeLoop, Node, RootNode}
 import scala.annotation.meta.field
 import scala.virtualization.lms.common._
 
-trait TruffleGenPkg extends TruffleGenPrimitiveOps { val IR: TruffleOpsPkgExp }
+trait TruffleGenPkg extends TruffleGenPrimitiveOps with TruffleGenArrayOps { val IR: TruffleOpsPkgExp }
 
 trait TruffleOpsPkgExp extends TruffleOpsPkg
 with ImplicitOpsExp with NumericOpsExp with FractionalOpsExp with OrderingOpsExp with StringOpsExp

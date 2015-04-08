@@ -34,6 +34,8 @@ trait TruffleBaseGen extends NestedBlockTraversal with Config {
       case "Object" => FrameSlotKind.Object
       case "Boolean" => FrameSlotKind.Boolean
       case "Double" => FrameSlotKind.Double
+      case "Array[Int]" => FrameSlotKind.Object // how to overcome a hack like that?
+      case "Unit" => FrameSlotKind.Object
     }
   }
 
@@ -52,6 +54,7 @@ trait TruffleBaseGen extends NestedBlockTraversal with Config {
         runtime = Truffle.getRuntime()
         frameDescriptor = new FrameDescriptor()
         val blk = reifyBlock(f(getArg[T](0)))
+        println("blk = " + blk)
         val truffleTree = reifyBlockToTrufle(blk, 1)
         new LMSRootNode(frameDescriptor, truffleTree)
       } finally {
